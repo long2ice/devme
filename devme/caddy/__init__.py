@@ -16,18 +16,12 @@ async def start():
                 }
             )
         host_config = {
-            "NetworkMode": settings.docker.network,
+            "NetworkMode": "host",
             "RestartPolicy": {"Name": "always"},
             "Mounts": Volumes,
         }
-        if not settings.is_host_mode:
-            host_config["PortBindings"] = {
-                "80/tcp": [{"HostIP": "0.0.0.0", "HostPort": settings.caddy.http_port}],
-                "443/tcp": [{"HostIP": "0.0.0.0", "HostPort": settings.caddy.https_port}],
-                "2019/tcp": [{"HostIP": "0.0.0.0", "HostPort": settings.caddy.api_port}],
-            }
         try:
-            container = await docker.containers.run(
+            await docker.containers.run(
                 config={
                     "Image": ImageName,
                     "HostConfig": host_config,

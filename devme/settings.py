@@ -25,17 +25,12 @@ class Network(str, Enum):
 
 class Docker(BaseModel):
     host: str
-    network: Network
 
 
 class Settings(BaseSettings):
     db_url: Dsn
     caddy: Caddy
     docker: Docker
-
-    @property
-    def is_host_mode(self):
-        return self.docker.network == Network.host
 
 
 with open("config.yaml") as f:
