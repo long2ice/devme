@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "devme"
+version = "0.1.0"
+description = "Deploy your git project like a charm"
+authors = ["long2ice <long2ice@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/long2ice/devme.git"
+repository = "https://github.com/long2ice/devme.git"
+documentation = "https://github.com/long2ice/devme/blob/main/README.md"
+packages = [
+    { include = "devme" }
+]
+include = ["LICENSE", "README.md", "CHANGELOG.md"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "*"
+asyncmy = "*"
+asyncpg = "*"
+aiodocker = "*"
+httpx = "*"
+PyYAML = "*"
+uvicorn = "*"
+loguru = "*"
+tortoise-orm = "*"
+email-validator = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pytest-asyncio = "*"
+pyproject-flake8 = "*"
+black = "*"
+isort = "*"
+mypy = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 100
+target-version = ["py36", "py37", "py38", "py39"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.mypy]
+pretty = true
+ignore_missing_imports = true
+
+[tool.flake8]
+ignore = "E501,W503,E203"

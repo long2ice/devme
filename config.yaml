@@ -1,0 +1,8 @@
+db_url: mysql://root:123456@127.0.0.1:3306/devme
+caddy:
+  http_port: 80
+  https_port: 443
+  api_port: 2019
+docker:
+  host: unix:///var/run/docker.sock
+  network: bridge
