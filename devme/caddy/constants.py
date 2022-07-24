@@ -1,7 +1,7 @@
 from enum import Enum
 
 ContainerName = "devme-caddy"
-ImageName = "caddy"
+ImageName = "caddy:devme"
 
 
 class Volume(str, Enum):

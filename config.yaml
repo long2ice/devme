@@ -1,7 +1,11 @@
-db_url: mysql://root:123456@127.0.0.1:3306/devme
+db_url: mysql://root:123456@192.168.123.205:3306/devme
 caddy:
+  plugins:
+    - github.com/caddy-dns/alidns
+  email: example@long2ice.io
   http_port: 80
   https_port: 443
   api_port: 2019
+  network: devme # host or devme network name
 docker:
   host: unix:///var/run/docker.sock

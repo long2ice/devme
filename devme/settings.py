@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List, Optional
 
 import yaml
 from pydantic import AnyUrl, BaseModel, BaseSettings
@@ -13,9 +14,12 @@ class Dsn(AnyUrl):
 
 
 class Caddy(BaseModel):
-    http_port: str
-    https_port: str
-    api_port: str
+    email: str
+    http_port: str = 80
+    https_port: str = 443
+    api_port: str = 2019
+    network: str = "host"
+    plugins: List[str] = ["github.com/caddy-dns/alidns"]
 
 
 class Network(str, Enum):

@@ -1,0 +1,2 @@
+class AddServerError(Exception):
+    pass

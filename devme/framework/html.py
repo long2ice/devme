@@ -31,5 +31,5 @@ class Html(Framework):
         async for log in container.log(stderr=True, stdout=True, follow=True):
             logger.info(log)
 
-    async def deploy(self, domains: List[str]):
-        return await self.caddy.add_file_server(domains, f"/srv/{self.project_name}")
+    async def deploy(self):
+        return await self.caddy.add_file_server()

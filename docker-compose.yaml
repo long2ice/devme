@@ -1,0 +1,17 @@
+version: "3"
+services:
+  devme:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    image: devme
+    networks:
+      - devme
+    command: uvicorn devme.app:app --host 0.0.0.0
+    volumes:
+      - ./config.yaml:/devme/config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+networks:
+  devme:
+    name: devme

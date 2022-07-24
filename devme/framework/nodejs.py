@@ -15,13 +15,17 @@ class NodeJS(Html):
         self,
         project_name: str,
         git_url: str,
+        domains: List[str],
+        http_port: int = 80,
+        https_port: Optional[int] = 443,
         image: Optional[str] = None,
+        root: str = ".",
         output_dir: Optional[str] = None,
         envs: Optional[List[Env]] = None,
         install_command: Optional[str] = None,
         build_command: Optional[str] = None,
     ):
-        super().__init__(project_name, git_url, image, envs)
+        super().__init__(project_name, git_url, domains, http_port, https_port, image, envs, root)
 
         if output_dir:
             self.output_dir = output_dir
