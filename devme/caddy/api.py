@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List
+from typing import List, Optional
 
 import httpx
 from loguru import logger
@@ -15,7 +15,7 @@ class Caddy:
         host: str,
         port: int,
         http_port: int = 80,
-        https_port: int = 443,
+        https_port: Optional[int] = 443,
     ):
         self.project_name = project_name
         self.https_port = https_port
@@ -23,7 +23,14 @@ class Caddy:
         self.client = httpx.AsyncClient(base_url=f"http://{host}:{port}/config/apps/http/servers")
         self.domains = domains
 
-    async def add_route(self, route: dict, server: str):
+    async def add_route(
+        self,
+        route: dict,
+    ):
+        if self.https_port:
+            server = "srv0"
+        else:
+            server = "srv1"
         res = await self.client.get(f"/{server}/routes")
         routes = res.json()
         copy_routes = deepcopy(routes)
@@ -47,13 +54,26 @@ class Caddy:
             "match": [{"host": self.domains}],
             "terminal": True,
         }
-        if self.https_port:
-            res = await self.add_route(route, "srv0")
-        else:
-            res = await self.add_route(route, "srv1")
+
+        res = await self.add_route(
+            route,
+        )
         if res.status_code == 500:
             raise AddServerError(res.json()["error"])
         logger.info(f"add file server, status code: {res.status_code}")
+
+    async def add_reverse_proxy(self, server: str):
+        route = {
+            "handle": [
+                {"handler": "reverse_proxy", "upstreams": [{"dial": server}]},
+            ],
+            "match": [{"host": self.domains}],
+            "terminal": True,
+        }
+        res = await self.add_route(route)
+        if res.status_code == 500:
+            raise AddServerError(res.json()["error"])
+        logger.info(f"add reverse proxy, status code: {res.status_code}")
 
     async def close(self):
         await self.client.aclose()

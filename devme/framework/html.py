@@ -1,14 +1,12 @@
-from typing import List
-
 from loguru import logger
 
 from devme.caddy.volumes import VolumeSite
-from devme.framework import Framework, FrameworkType
+from devme.enums import FrameworkType
+from devme.framework import Framework
 
 
 class Html(Framework):
     type = FrameworkType.html
-    image = "node"
 
     def get_cmds(self):
         return [

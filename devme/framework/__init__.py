@@ -1,6 +1,4 @@
 import abc
-import os.path
-from enum import Enum
 from pathlib import Path
 from typing import List, Optional
 
@@ -8,18 +6,14 @@ import aiodocker
 
 from devme.caddy import ContainerName
 from devme.caddy.api import Caddy
+from devme.enums import FrameworkType
 from devme.schema import Env
 from devme.settings import settings
 
 
-class FrameworkType(str, Enum):
-    nodejs = "nodejs"
-    html = "html"
-
-
 class Framework:
     type: FrameworkType
-    image: str
+    image = "node"
 
     def __init__(
         self,

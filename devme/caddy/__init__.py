@@ -2,7 +2,7 @@ import aiodocker
 from aiodocker import DockerError
 from loguru import logger
 
-from devme.caddy.constants import ContainerName, Volume, ImageName
+from devme.caddy.constants import ContainerName, ImageName, Volume
 from devme.caddy.image import build_image
 from devme.caddy.volumes import Volumes
 from devme.settings import settings
@@ -31,9 +31,9 @@ async def start():
             host_config["NetworkMode"] = "host"
         else:
             host_config["PortBindings"] = {
-                f"{http_port}/tcp": [{"HostIP": "0.0.0.0", "HostPort": http_port}],
-                f"{https_port}/tcp": [{"HostIP": "0.0.0.0", "HostPort": https_port}],
-                f"{api_port}/tcp": [{"HostIP": "0.0.0.0", "HostPort": api_port}],
+                f"{http_port}/tcp": [{"HostIP": "0.0.0.0", "HostPort": str(http_port)}],
+                f"{https_port}/tcp": [{"HostIP": "0.0.0.0", "HostPort": str(https_port)}],
+                f"{api_port}/tcp": [{"HostIP": "0.0.0.0", "HostPort": str(api_port)}],
             }
             network_config = {"EndpointsConfig": {network: {}}}
         try:

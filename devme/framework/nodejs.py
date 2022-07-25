@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from devme.framework import FrameworkType
+from devme.enums import FrameworkType
 from devme.framework.html import Html
 from devme.schema import Env
 
@@ -17,7 +17,7 @@ class NodeJS(Html):
         git_url: str,
         domains: List[str],
         http_port: int = 80,
-        https_port: Optional[int] = 443,
+        https_port: int = 443,
         image: Optional[str] = None,
         root: str = ".",
         output_dir: Optional[str] = None,

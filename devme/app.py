@@ -27,8 +27,3 @@ app.include_router(router)
 @app.on_event("startup")
 async def startup():
     await caddy.start()
-
-
-@app.on_event("shutdown")
-async def startup():
-    pass

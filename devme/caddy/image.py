@@ -1,7 +1,7 @@
 import tarfile
 import tempfile
 from io import BytesIO
-from typing import BinaryIO, IO
+from typing import IO, BinaryIO
 
 import aiodocker
 from loguru import logger
@@ -55,7 +55,7 @@ RUN echo "${{CADDY_FILE}}" > /etc/caddy/Caddyfile"""
     async with aiodocker.Docker(url=settings.docker.host) as docker:
         f = BytesIO(docker_file.encode())
         tar_obj = mktar_from_dockerfile(f)
-        async for item in docker.images.build(
+        async for item in docker.images.build(  # type:ignore
             fileobj=tar_obj,
             encoding="gzip",
             tag=ImageName,
