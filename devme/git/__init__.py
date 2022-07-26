@@ -1,2 +1,5 @@
+from devme.enums import GitType
+
+
 class Git:
-    pass
+    type: GitType

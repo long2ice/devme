@@ -1,6 +1,6 @@
 import abc
 from pathlib import Path
-from typing import List, Optional
+from typing import Callable, List, Optional
 
 import aiodocker
 
@@ -19,10 +19,12 @@ class Framework:
         self,
         project_name: str,
         git_url: str,
+        log_callback: Callable = None,
         image: Optional[str] = None,
         envs: Optional[List[Env]] = None,
         root: str = ".",
         ssl: bool = False,
+        **kwargs,
     ):
         self.git_url = git_url
         self.project_name = project_name
@@ -32,6 +34,7 @@ class Framework:
         if image:
             self.image = image
         self.docker = aiodocker.Docker(url=settings.docker.host)
+        self.log_callback = log_callback
         self.caddy = Caddy(
             project_name=project_name,
             host="127.0.0.1" if settings.caddy.network == "host" else ContainerName,

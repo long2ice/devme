@@ -12,7 +12,7 @@ async def start():
     http_port = settings.caddy.http_port
     https_port = settings.caddy.https_port
     api_port = settings.caddy.api_port
-    await build_image(settings.caddy.email, https_port, http_port, api_port)
+    await build_image(settings.caddy.email, https_port, http_port, api_port, settings.caddy.acme)
     async with aiodocker.Docker(url=settings.docker.host) as docker:
         for v in Volume:
             await docker.volumes.create(

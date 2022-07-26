@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 import yaml
 from pydantic import AnyUrl, BaseModel, BaseSettings
@@ -15,6 +15,7 @@ class Dsn(AnyUrl):
 
 class Caddy(BaseModel):
     email: str
+    acme: Optional[str]
     http_port: int = 80
     https_port: int = 443
     api_port: int = 2019

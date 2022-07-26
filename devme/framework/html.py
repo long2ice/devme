@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Callable, List, Optional
 
 from loguru import logger
 
@@ -16,12 +16,13 @@ class Html(Framework):
         project_name: str,
         git_url: str,
         domains: List[str],
+        log_callback: Callable = None,
         image: Optional[str] = None,
         envs: Optional[List[Env]] = None,
         root: str = ".",
         ssl: bool = False,
     ):
-        super().__init__(project_name, git_url, image, envs, root, ssl)
+        super().__init__(project_name, git_url, log_callback, image, envs, root, ssl)
         self.domains = domains
 
     def get_cmds(self):
@@ -43,7 +44,9 @@ class Html(Framework):
             name=f"devme-{self.project_name}-builder",
         )
         async for log in container.log(stderr=True, stdout=True, follow=True):
-            logger.debug(log.get("stream") or log.get("aux").get("ID"))
+            if self.log_callback:
+                await self.log_callback(log)
+            logger.debug(log)
 
     async def deploy(self):
         return await self.caddy.add_file_server(self.domains)

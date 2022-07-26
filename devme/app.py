@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
+from tortoise.exceptions import DoesNotExist
 
 from devme import caddy
-from devme.exceptions import http_exception_handler
+from devme.exceptions import http_exception_handler, not_exists_exception_handler
 from devme.routes import router
 from devme.settings import settings
 
@@ -32,6 +33,7 @@ app.add_middleware(
     allow_credentials=True,
 )
 app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(DoesNotExist, not_exists_exception_handler)
 
 
 @app.on_event("startup")

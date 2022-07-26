@@ -1,7 +1,7 @@
 import tarfile
 import tempfile
 from io import BytesIO
-from typing import IO, BinaryIO
+from typing import IO, BinaryIO, Optional
 
 import aiodocker
 from loguru import logger
@@ -27,12 +27,15 @@ def mktar_from_dockerfile(fileobject: BinaryIO) -> IO:
     return f
 
 
-async def build_image(email: str, https_port: int, http_port: int, api_port: int):
+async def build_image(
+    email: str, https_port: int, http_port: int, api_port: int, acme: Optional[str] = None
+):
     caddy_file = f"""{{
     email {email}
     https_port {https_port}
     http_port {http_port}
     admin 0.0.0.0:{api_port}
+    {acme or ""}
 }}
 localhost:{http_port} {{
     root * /usr/share/caddy

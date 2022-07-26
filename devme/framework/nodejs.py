@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Callable, List, Optional
 
 from devme.enums import FrameworkType
 from devme.framework.html import Html
@@ -16,6 +16,7 @@ class NodeJS(Html):
         project_name: str,
         git_url: str,
         domains: List[str],
+        log_callback: Callable = None,
         image: Optional[str] = None,
         root: str = ".",
         ssl: bool = False,
@@ -24,7 +25,7 @@ class NodeJS(Html):
         install_command: Optional[str] = None,
         build_command: Optional[str] = None,
     ):
-        super().__init__(project_name, git_url, domains, image, envs, root, ssl)
+        super().__init__(project_name, git_url, domains, log_callback, image, envs, root, ssl)
 
         if output_dir:
             self.output_dir = output_dir

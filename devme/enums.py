@@ -9,6 +9,12 @@ class FrameworkType(str, Enum):
 
 
 class DeployStatus(str, Enum):
+    running = "running"
     success = "success"
     failed = "failed"
     canceled = "canceled"
+
+
+class GitType(str, Enum):
+    github = "github"
+    gitlab = "gitlab"

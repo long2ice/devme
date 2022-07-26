@@ -1,7 +1,7 @@
 import os.path
 import tarfile
 import tempfile
-from typing import Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 import aiodocker
 from aiodocker import DockerError
@@ -24,12 +24,13 @@ class Docker(Framework):
         domains: Optional[Dict[str, int]] = None,
         ports: Optional[Dict[int, int]] = None,
         network: str = "host",
+        log_callback: Callable = None,
         image: Optional[str] = None,
         envs: Optional[List[Env]] = None,
         root: str = ".",
         ssl: bool = False,
     ):
-        super().__init__(project_name, git_url, image, envs, root, ssl)
+        super().__init__(project_name, git_url, log_callback, image, envs, root, ssl)
         self.command = command
         self.ports = ports
         self.network = network
