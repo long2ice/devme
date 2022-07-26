@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from starlette.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
 from devme import caddy
+from devme.exceptions import http_exception_handler
 from devme.routes import router
 from devme.settings import settings
 
@@ -22,6 +24,14 @@ register_tortoise(
     generate_schemas=True,
 )
 app.include_router(router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
+)
+app.add_exception_handler(HTTPException, http_exception_handler)
 
 
 @app.on_event("startup")

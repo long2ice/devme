@@ -34,11 +34,11 @@ async def build_image(email: str, https_port: int, http_port: int, api_port: int
     http_port {http_port}
     admin 0.0.0.0:{api_port}
 }}
-localhost:80 {{
+localhost:{http_port} {{
     root * /usr/share/caddy
     file_server
 }}
-localhost:443 {{
+localhost:{https_port} {{
     root * /usr/share/caddy
     file_server
 }}"""
@@ -62,5 +62,5 @@ RUN echo "${{CADDY_FILE}}" > /etc/caddy/Caddyfile"""
             stream=True,
             buildargs={"CADDY_FILE": caddy_file},
         ):
-            logger.info(item)
+            logger.debug(item.get("stream") or item.get("aux").get("ID"))
         tar_obj.close()

@@ -1,4 +1,7 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
+
+from devme.enums import FrameworkType
 
 router = APIRouter()
 
@@ -8,8 +11,18 @@ async def get_projects():
     pass
 
 
+class CreateProject(BaseModel):
+    name: str
+    url: str
+    framework: FrameworkType
+    image: str
+    root: str
+    deployment: dict
+    env: dict
+
+
 @router.post("")
-async def create_project():
+async def create_project(req: CreateProject):
     pass
 
 

@@ -19,12 +19,10 @@ class Framework:
         self,
         project_name: str,
         git_url: str,
-        domains: List[str],
-        http_port: int = 80,
-        https_port: Optional[int] = 443,
         image: Optional[str] = None,
         envs: Optional[List[Env]] = None,
         root: str = ".",
+        ssl: bool = False,
     ):
         self.git_url = git_url
         self.project_name = project_name
@@ -35,12 +33,10 @@ class Framework:
             self.image = image
         self.docker = aiodocker.Docker(url=settings.docker.host)
         self.caddy = Caddy(
-            domains=domains,
             project_name=project_name,
             host="127.0.0.1" if settings.caddy.network == "host" else ContainerName,
             port=settings.caddy.api_port,
-            http_port=http_port,
-            https_port=https_port,
+            ssl=ssl,
         )
 
     @abc.abstractmethod

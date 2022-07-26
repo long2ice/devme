@@ -17,6 +17,7 @@ class Project(Model):
 
 class Deploy(Model):
     project: fields.ForeignKeyRelation["Project"] = fields.ForeignKeyField("models.Project")
+    log = fields.TextField()
     status = fields.CharEnumField(DeployStatus)
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
