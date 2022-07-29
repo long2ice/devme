@@ -44,7 +44,7 @@ class UpdateProject(BaseModel):
     env: Optional[dict]
 
 
-@router.put("/{project_id}")
+@router.patch("/{project_id}")
 async def update_project(project_id: int, req: UpdateProject):
     project = await Project.get(pk=project_id)
     await project.update_from_dict(req.dict(exclude_none=True, exclude_unset=True)).save()
