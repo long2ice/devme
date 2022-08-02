@@ -10,5 +10,6 @@ class Env(BaseModel):
 
 
 class Repo(BaseModel):
-    url: str
+    clone_url: str
     name: str
+    pushed_at: str

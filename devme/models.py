@@ -30,3 +30,6 @@ class GitProvider(Model):
     name = fields.CharField(max_length=200)
     type = fields.CharEnumField(GitType, default=GitType.github)
     token = fields.CharField(max_length=200)
+
+    class Meta:
+        unique_together = [("type", "token")]

@@ -1,5 +1,7 @@
+from devme.enums import GitType
 from devme.git import Git
 
 
 class GitLab(Git):
-    pass
+    base_url = "https://api.github.com"
+    type = GitType.gitlab

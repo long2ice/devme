@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
@@ -38,4 +40,4 @@ app.add_exception_handler(DoesNotExist, not_exists_exception_handler)
 
 @app.on_event("startup")
 async def startup():
-    await caddy.start()
+    asyncio.ensure_future(caddy.start())
