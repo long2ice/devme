@@ -6,7 +6,7 @@ from starlette.background import BackgroundTasks
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from devme.enums import DeployStatus, FrameworkType
-from devme.models import Deploy, Project
+from devme.models import Deploy, Project, Domain
 from devme.utils import get_framework
 
 router = APIRouter()
@@ -49,41 +49,6 @@ async def update_project(project_id: int, req: UpdateProject):
     project = await Project.get(pk=project_id)
     await project.update_from_dict(req.dict(exclude_none=True, exclude_unset=True)).save()
     return project
-
-
-async def deploy(d: Deploy):
-    project = d.project
-
-    async def log_callback(log: str):
-        if d.log is None:
-            d.log = ""
-        d.log += log
-        await d.save(update_fields=["log"])
-
-    framework = get_framework(project.framework)
-    f = framework(
-        project_name=project.name,
-        git_url=project.url,
-        image=project.image,
-        envs=project.env,
-        root=project.root,
-        **project.deployment,
-        log_callback=log_callback,
-    )
-    await f.build()
-    await f.deploy()
-    await f.clear()
-
-
-@router.post("/{project_id}/deploy")
-async def deploy_project(
-    background_tasks: BackgroundTasks,
-    project_id: int,
-):
-    project = await Project.get(pk=project_id)
-    d = await Deploy.create(project=project, status=DeployStatus.running)
-    background_tasks.add_task(deploy, d)
-    return d
 
 
 @router.delete("/{project_id}")

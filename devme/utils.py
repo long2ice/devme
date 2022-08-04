@@ -1,7 +1,6 @@
 import importlib
 import inspect
 import pkgutil
-from types import ModuleType
 from typing import Type
 
 from devme import framework, git

@@ -18,8 +18,15 @@ class Project(Model):
     updated_at = fields.DatetimeField(auto_now=True)
 
 
+class Domain(Model):
+    project: fields.ForeignKeyRelation[Project] = fields.ForeignKeyField("models.Project")
+    domain = fields.CharField(max_length=200, unique=True)
+    branch = fields.CharField(max_length=200, default="main")
+
+
 class Deploy(Model):
     project: fields.ForeignKeyRelation[Project] = fields.ForeignKeyField("models.Project")
+    branch = fields.CharField(max_length=200, default="main")
     log = fields.TextField(null=True)
     status = fields.CharEnumField(DeployStatus)
     created_at = fields.DatetimeField(auto_now_add=True)

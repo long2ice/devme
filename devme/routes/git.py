@@ -28,8 +28,3 @@ class CreateGitProvider(BaseModel):
 @router.post("", response_model=pydantic_model_creator(GitProvider))
 async def create_git_provider(req: CreateGitProvider):
     return await GitProvider.create(**req.dict())
-
-
-@router.post("/repo/import")
-async def import_repo():
-    pass
