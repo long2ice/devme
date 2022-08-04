@@ -15,16 +15,13 @@ include = ["LICENSE", "README.md", "CHANGELOG.md"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-fastapi = "*"
+fastapi = { version = "*", extras = ["all"] }
 asyncmy = "*"
 asyncpg = "*"
 aiodocker = "*"
 httpx = "*"
-PyYAML = "*"
-uvicorn = "*"
 loguru = "*"
 tortoise-orm = "*"
-email-validator = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

@@ -16,6 +16,6 @@ FROM python:3.9-slim
 WORKDIR /devme
 COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
-COPY --from=web-builder /src/devme-web/build /devme/static
 COPY . /devme
+COPY --from=web-builder /src/devme-web/build /devme/static
 CMD ["uvicorn" ,"devme.app:app", "--host", "0.0.0.0"]
