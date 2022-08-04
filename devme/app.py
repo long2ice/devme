@@ -2,6 +2,7 @@ import asyncio
 
 from fastapi import FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
 from tortoise.contrib.fastapi import register_tortoise
 from tortoise.exceptions import DoesNotExist
 
@@ -38,6 +39,7 @@ app.add_middleware(
     allow_headers=["*"],
     allow_credentials=True,
 )
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(DoesNotExist, not_exists_exception_handler)
 
