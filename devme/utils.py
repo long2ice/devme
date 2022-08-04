@@ -41,3 +41,10 @@ git_map = _discover_git()
 
 def get_git(type_: GitType) -> Type[Git]:
     return git_map[type_]
+
+
+def get_owner_repo_from_url(url: str):
+    items = url.split("/")
+    repo = items[-1].split(".")[-2]
+    owner = items[-2]
+    return owner, repo

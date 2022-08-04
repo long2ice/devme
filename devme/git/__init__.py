@@ -18,3 +18,15 @@ class Git:
     @abc.abstractmethod
     async def get_repos(self) -> List[Repo]:
         raise NotImplementedError
+
+    @abc.abstractmethod
+    async def create_webhook(self, owner: str, repo: str, callback_url: str):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    async def delete_webhook(
+        self,
+        owner: str,
+        repo: str,
+    ):
+        raise NotImplementedError

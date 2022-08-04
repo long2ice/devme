@@ -2,7 +2,7 @@ from enum import Enum
 from typing import List, Optional
 
 import yaml
-from pydantic import AnyUrl, BaseModel, BaseSettings
+from pydantic import AnyUrl, BaseModel, BaseSettings, HttpUrl
 
 
 class Dsn(AnyUrl):
@@ -34,6 +34,8 @@ class Docker(BaseModel):
 
 class Settings(BaseSettings):
     db_url: Dsn
+    site_url: HttpUrl
+    secret: str
     caddy: Caddy
     docker: Docker
 

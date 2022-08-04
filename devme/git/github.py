@@ -1,8 +1,11 @@
 from typing import List
 
+from loguru import logger
+
 from devme.enums import GitType
 from devme.git import Git
 from devme.schema import Repo
+from devme.settings import settings
 
 
 class GitHub(Git):
@@ -20,3 +23,23 @@ class GitHub(Git):
         res = await self.client.get("/user/repos")
         data = res.json()
         return [Repo.parse_obj(item) for item in data]
+
+    async def create_webhook(self, owner: str, repo: str, callback_url: str):
+        data = {
+            "hub.mode": "subscribe",
+            "hub.topic": f"https://github.com/{owner}/{repo}/events/push",
+            "hub.callback": callback_url,
+            "hub.secret": settings.secret,
+        }
+        res = await self.client.post("/hub", data=data)
+        ret = res.json()
+        logger.info(ret)
+
+    async def delete_webhook(self, owner: str, repo: str):
+        data = {
+            "hub.mode": "unsubscribe",
+            "hub.topic": f"https://github.com/{owner}/{repo}/events/push",
+        }
+        res = await self.client.post("/hub", data=data)
+        ret = res.json()
+        logger.info(ret)

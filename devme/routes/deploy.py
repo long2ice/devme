@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from starlette.background import BackgroundTasks
+from starlette.requests import Request
 
 from devme.enums import DeployStatus
 from devme.models import Deploy, Domain, Project
@@ -51,5 +52,16 @@ class DeployProject(BaseModel):
 async def deploy_project(background_tasks: BackgroundTasks, project_id: int, req: DeployProject):
     project = await Project.get(pk=project_id)
     d = await Deploy.create(project=project, status=DeployStatus.running, branch=req.branch)
+    background_tasks.add_task(deploy, d)
+    return d
+
+
+@router.get("/webhook")
+async def deploy_webhook(background_tasks: BackgroundTasks, project_id: int, request: Request):
+    body = await request.json()
+    ref = body["ref"]
+    branch = ref.split("/")[-1]
+    project = await Project.get(pk=project_id)
+    d = await Deploy.create(project=project, status=DeployStatus.running, branch=branch)
     background_tasks.add_task(deploy, d)
     return d
