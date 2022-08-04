@@ -32,10 +32,16 @@ class Docker(BaseModel):
     host: str
 
 
+class Server(BaseModel):
+    host: str = "127.0.0.1"
+    port: int = 8000
+    url: str
+
+
 class Settings(BaseSettings):
     db_url: Dsn
     debug: bool = False
-    site_url: HttpUrl
+    server: Server
     secret: str
     caddy: Caddy
     docker: Docker

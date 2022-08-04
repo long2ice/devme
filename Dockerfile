@@ -10,3 +10,4 @@ WORKDIR /devme
 COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY . /devme
+CMD ['uvicorn' ,'devme.app:app', '--host', '0.0.0.0']

@@ -36,7 +36,7 @@ async def create_project(req: CreateProject):
         git = get_git(git_provider.type)(git_provider.token)
         owner, repo = get_owner_repo_from_url(req.url)
         await git.create_webhook(
-            owner, repo, settings.site_url + f"/project/{project.pk}/deploy/webhook"
+            owner, repo, settings.server.url + f"/project/{project.pk}/deploy/webhook"
         )
     return project
 

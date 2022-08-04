@@ -1,15 +1,18 @@
 db_url: mysql://root:123456@192.168.123.205:3306/devme
 secret: devme
-site_url: https://devme-api.long2ice.io
 debug: true
+server:
+  url: http://devme-api.long2ice.io # public server url
+  host: 192.168.123.204 # host accessed from caddy container
+  port: 8000 # port accessed from caddy container
 caddy:
   plugins:
     - github.com/caddy-dns/cloudflare
-  acme: acme_dns cloudflare {env.CF_API_TOKEN}
+  acme: acme_dns cloudflare xxxxxx
   email: long2ice@gmail.com
   http_port: 80
   https_port: 443
   api_port: 2019
-  network: devme # host or devme network name
+  network: devme # host or the network name caddy container to join
 docker:
   host: unix:///var/run/docker.sock

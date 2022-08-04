@@ -30,6 +30,7 @@ def mktar_from_dockerfile(fileobject: BinaryIO) -> IO:
 async def build_image(
     email: str, https_port: int, http_port: int, api_port: int, acme: Optional[str] = None
 ):
+    server = settings.server
     caddy_file = f"""{{
     email {email}
     https_port {https_port}
@@ -44,6 +45,9 @@ localhost:{http_port} {{
 localhost:{https_port} {{
     root * /usr/share/caddy
     file_server
+}}
+{server.url} {{
+    reverse_proxy {server.host}:{server.port}
 }}"""
     plugins = settings.caddy.plugins
     plugins_content = " ".join(f"--with {p}" for p in plugins)
