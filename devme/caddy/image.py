@@ -47,7 +47,8 @@ localhost:{https_port} {{
 }}"""
     plugins = settings.caddy.plugins
     plugins_content = " ".join(f"--with {p}" for p in plugins)
-    docker_file = f"""FROM caddy:builder AS builder
+    caddy_builder = "caddy:builder"
+    docker_file = f"""FROM {caddy_builder} AS builder
 RUN xcaddy build {plugins_content}
 
 FROM caddy
@@ -56,6 +57,9 @@ ARG CADDY_FILE
 RUN echo "${{CADDY_FILE}}" > /etc/caddy/Caddyfile"""
 
     async with aiodocker.Docker(url=settings.docker.host) as docker:
+        async for item in docker.pull(caddy_builder, stream=True):
+            logger.debug(item)
+        logger.success(f"pull image {caddy_builder} success")
         f = BytesIO(docker_file.encode())
         tar_obj = mktar_from_dockerfile(f)
         async for item in docker.images.build(  # type:ignore
@@ -65,5 +69,6 @@ RUN echo "${{CADDY_FILE}}" > /etc/caddy/Caddyfile"""
             stream=True,
             buildargs={"CADDY_FILE": caddy_file},
         ):
-            logger.debug(item.get("stream") or item.get("aux").get("ID"))
+            logger.debug(item)
         tar_obj.close()
+        logger.success(f'build caddy image with plugins: {", ".join(plugins)} success')

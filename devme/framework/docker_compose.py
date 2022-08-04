@@ -22,8 +22,9 @@ class DockerCompose(Docker):
             },
             name=f"devme-{self.project_name}-builder",
         )
-        async for log in container.log(stderr=True, stdout=True, follow=True):
-            logger.debug(log.get("stream") or log.get("aux").get("ID"))
+        async for item in container.log(stderr=True, stdout=True, follow=True):
+            logger.debug(item)
+        logger.success(f"run project {self.project_name} success")
 
     async def deploy(self):
         await self._add_reverse_proxy()

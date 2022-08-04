@@ -2,10 +2,7 @@ db_url: mysql://root:123456@192.168.123.205:3306/devme
 caddy:
   plugins:
     - github.com/caddy-dns/cloudflare
-  acme: |
-    acme_dns cloudflare {
-      {env.CF_API_TOKEN}
-    }
+  acme: acme_dns cloudflare {env.CF_API_TOKEN}
   email: long2ice@gmail.com
   http_port: 80
   https_port: 443

@@ -50,18 +50,19 @@ class Docker(Framework):
             },
             name=f"devme-{self.project_name}-builder",
         )
-        async for log in container.log(stderr=True, stdout=True, follow=True):
-            logger.info(log.get("stream") or log.get("aux").get("ID"))
+        async for item in container.log(stderr=True, stdout=True, follow=True):
+            logger.debug(item)
         async with aiodocker.Docker(url=settings.docker.host) as docker:
             tar = os.path.join(tmp_dir, self.project_name, f"{self.project_name}.tar.gz")
             with tarfile.open(tar, mode="r:gz") as f:
-                async for log in docker.images.build(
+                async for item in docker.images.build(
                     fileobj=f.fileobj,
                     encoding="gzip",
                     tag=self.project_name,
                     stream=True,
                 ):
-                    logger.debug(log.get("stream") or log.get("aux").get("ID"))
+                    logger.debug(item)
+        logger.success(f"build image {self.project_name} success")
 
     async def _add_reverse_proxy(self):
         container_name = f"devme-{self.project_name}"
@@ -109,9 +110,10 @@ class Docker(Framework):
             },
             name=container_name,
         )
-        for log in await container.log(stderr=True, stdout=True, follow=False):
-            logger.debug(log.get("stream") or log.get("aux").get("ID"))
+        for item in await container.log(stderr=True, stdout=True, follow=False):
+            logger.debug(item)
         await self._add_reverse_proxy()
+        logger.success(f"deploy {self.project_name} success")
 
     def get_cmds(self):
         return [

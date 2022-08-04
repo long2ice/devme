@@ -43,10 +43,11 @@ class Html(Framework):
             },
             name=f"devme-{self.project_name}-builder",
         )
-        async for log in container.log(stderr=True, stdout=True, follow=True):
+        async for item in container.log(stderr=True, stdout=True, follow=True):
             if self.log_callback:
-                await self.log_callback(log)
-            logger.debug(log)
+                await self.log_callback(item)
+            logger.debug(item)
+        logger.success(f"build project {self.project_name} success")
 
     async def deploy(self):
         return await self.caddy.add_file_server(self.domains)
