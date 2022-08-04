@@ -12,7 +12,7 @@ from devme.utils import get_git, get_owner_repo_from_url
 router = APIRouter()
 
 
-@router.get("", response_model=List[pydantic_model_creator(Project)])
+@router.get("", response_model=List[pydantic_model_creator(Project)])  # type:ignore
 async def get_projects():
     return await Project.all()
 

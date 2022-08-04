@@ -1,5 +1,6 @@
 from typing import List
 
+from httpx import Headers
 from loguru import logger
 
 from devme.enums import GitType
@@ -14,10 +15,12 @@ class GitHub(Git):
 
     def __init__(self, token: str):
         super().__init__(token)
-        self.client.headers = {
-            "Accept": "application/vnd.github+json",
-            "Authorization": f"token {token}",
-        }
+        self.client.headers = Headers(
+            {
+                "Accept": "application/vnd.github+json",
+                "Authorization": f"token {token}",
+            }
+        )
 
     async def get_repos(self) -> List[Repo]:
         res = await self.client.get("/user/repos")

@@ -9,6 +9,8 @@ services:
     networks:
       - devme
     command: uvicorn devme.app:app --host 0.0.0.0
+    environment:
+      - LOGURU_LEVEL=INFO
     volumes:
       - ./config.yaml:/devme/config.yaml
       - /var/run/docker.sock:/var/run/docker.sock

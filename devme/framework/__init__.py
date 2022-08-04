@@ -24,6 +24,7 @@ class Framework:
         envs: Optional[List[Env]] = None,
         root: str = ".",
         ssl: bool = False,
+        branch: str = "main",
         **kwargs,
     ):
         self.git_url = git_url
@@ -33,6 +34,7 @@ class Framework:
         self.source_dir = Path(project_name) / root
         if image:
             self.image = image
+        self.branch = branch
         self.docker = aiodocker.Docker(url=settings.docker.host)
         self.log_callback = log_callback
         self.caddy = Caddy(

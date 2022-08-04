@@ -36,7 +36,7 @@ class NodeJS(Html):
 
     def get_cmds(self):
         return [
-            f"git clone {self.git_url} {self.project_name}",
+            f"git clone -b {self.branch} --depth 1 {self.git_url} {self.project_name}",
             f"cd {self.source_dir}",
             self.install_command,
             self.build_command,

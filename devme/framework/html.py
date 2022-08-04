@@ -27,7 +27,7 @@ class Html(Framework):
 
     def get_cmds(self):
         return [
-            f"git clone {self.git_url} {self.project_name}",
+            f"git clone -b {self.branch} --depth 1 {self.git_url} {self.project_name}",
             f"rm -rf /srv/{self.project_name}",
             f"mv {self.source_dir} /srv/{self.project_name}",
         ]

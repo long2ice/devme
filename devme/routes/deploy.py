@@ -29,14 +29,19 @@ async def deploy(d: Deploy):
 
     domains = await Domain.filter(branch=d.branch, project=project).values_list("domain", flat=True)
     framework = get_framework(project.framework)
+    url = project.url
+    if project.git_provider:
+        git_provider = project.git_provider
+        url = url.replace("://", f"://{git_provider.token}@")
     f = framework(
         project_name=project.name,
-        git_url=project.url,
+        git_url=url,
         image=project.image,
-        envs=project.env,
+        envs=project.env,  # type:ignore
         root=project.root,
         domains=domains,
-        **project.deployment,
+        branch=d.branch,
+        **project.deployment,  # type:ignore
         log_callback=log_callback,
     )
     await f.build()
@@ -50,7 +55,7 @@ class DeployProject(BaseModel):
 
 @router.post("")
 async def deploy_project(background_tasks: BackgroundTasks, project_id: int, req: DeployProject):
-    project = await Project.get(pk=project_id)
+    project = await Project.get(pk=project_id).select_related("git_provider")
     d = await Deploy.create(project=project, status=DeployStatus.running, branch=req.branch)
     background_tasks.add_task(deploy, d)
     return d
@@ -61,7 +66,7 @@ async def deploy_webhook(background_tasks: BackgroundTasks, project_id: int, req
     body = await request.json()
     ref = body["ref"]
     branch = ref.split("/")[-1]
-    project = await Project.get(pk=project_id)
+    project = await Project.get(pk=project_id).select_related("git_provider")
     d = await Deploy.create(project=project, status=DeployStatus.running, branch=branch)
     background_tasks.add_task(deploy, d)
     return d

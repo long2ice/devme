@@ -34,6 +34,7 @@ class Docker(BaseModel):
 
 class Settings(BaseSettings):
     db_url: Dsn
+    debug: bool = False
     site_url: HttpUrl
     secret: str
     caddy: Caddy

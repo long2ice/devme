@@ -1,6 +1,7 @@
 db_url: mysql://root:123456@192.168.123.205:3306/devme
 secret: devme
 site_url: https://devme-api.long2ice.io
+debug: true
 caddy:
   plugins:
     - github.com/caddy-dns/cloudflare
