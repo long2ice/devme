@@ -15,7 +15,7 @@ jobs:
         uses: VaultVulp/gp-docker-action@1.1.8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          image-name: telsearch
+          image-name: devme
   deploy:
     runs-on: ubuntu-latest
     needs:
