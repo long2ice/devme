@@ -31,7 +31,7 @@ if settings.debug:
     )
 else:
     app = FastAPI(
-        debug=settings.DEBUG,
+        debug=settings.debug,
         redoc_url=None,
         docs_url=None,
     )
