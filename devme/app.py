@@ -12,6 +12,7 @@ from tortoise.contrib.fastapi import register_tortoise
 from tortoise.exceptions import DoesNotExist
 
 from devme import caddy
+from devme.constants import API_PREFIX
 from devme.exceptions import http_exception_handler, not_exists_exception_handler
 from devme.routes import router
 from devme.settings import settings
@@ -29,7 +30,11 @@ if settings.debug:
         debug=settings.debug,
     )
 else:
-    app = FastAPI()
+    app = FastAPI(
+        debug=settings.DEBUG,
+        redoc_url=None,
+        docs_url=None,
+    )
 register_tortoise(
     app,
     db_url=settings.db_url,
@@ -37,8 +42,7 @@ register_tortoise(
     generate_schemas=True,
 )
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
-app.include_router(router, prefix="/api")
+app.include_router(router, prefix=API_PREFIX)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -49,13 +53,14 @@ app.add_middleware(
 
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(DoesNotExist, not_exists_exception_handler)
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 templates = Jinja2Templates(directory="static")
 
 
 @app.exception_handler(StarletteHTTPException)
 async def spa_server(request: Request, exc: StarletteHTTPException):
-    if exc.status_code == HTTP_404_NOT_FOUND:
+    if exc.status_code == HTTP_404_NOT_FOUND and not request.scope["path"].startswith(API_PREFIX):
         return templates.TemplateResponse("index.html", context={"request": request})
     else:
         return await exception_handler(request, exc)

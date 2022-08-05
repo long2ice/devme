@@ -22,6 +22,8 @@ class Domain(Model):
     project: fields.ForeignKeyRelation[Project] = fields.ForeignKeyField("models.Project")
     domain = fields.CharField(max_length=200, unique=True)
     branch = fields.CharField(max_length=200, default="main")
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)
 
 
 class Deploy(Model):
@@ -37,6 +39,8 @@ class GitProvider(Model):
     name = fields.CharField(max_length=200)
     type = fields.CharEnumField(GitType, default=GitType.github)
     token = fields.CharField(max_length=200)
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)
 
     class Meta:
         unique_together = [("type", "token")]
