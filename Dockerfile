@@ -6,7 +6,7 @@ ENV POETRY_VIRTUALENVS_CREATE false
 RUN pip3 install poetry && poetry install --no-root --no-dev
 
 FROM node as web-builder
-ENV REACT_APP_API_URL=/
+ENV REACT_APP_API_URL=/api
 RUN mkdir -p /src
 WORKDIR /src
 RUN git clone https://github.com/long2ice/devme-web.git
