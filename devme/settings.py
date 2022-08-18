@@ -49,3 +49,13 @@ class Settings(BaseSettings):
 
 with open("config.yaml") as f:
     settings = Settings.parse_obj(yaml.load(f, Loader=yaml.FullLoader))
+
+TORTOISE_ORM = {
+    "apps": {
+        "models": {
+            "models": ["devme.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+    "connections": {"default": settings.db_url},
+}

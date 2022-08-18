@@ -4,6 +4,7 @@ from httpx import Headers
 from loguru import logger
 
 from devme.enums import GitType
+from devme.exceptions import GetGitReposError
 from devme.git import Git
 from devme.schema import Repo
 from devme.settings import settings
@@ -25,6 +26,8 @@ class GitHub(Git):
     async def get_repos(self) -> List[Repo]:
         res = await self.client.get("/user/repos")
         data = res.json()
+        if res.status_code != 200:
+            raise GetGitReposError(data["message"])
         return [Repo.parse_obj(item) for item in data]
 
     async def create_webhook(self, owner: str, repo: str, callback_url: str):

@@ -22,6 +22,7 @@ aiodocker = "*"
 httpx = "*"
 loguru = "*"
 tortoise-orm = "*"
+aerich = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
@@ -31,6 +32,12 @@ black = "*"
 isort = "*"
 mypy = "*"
 types-PyYAML = "*"
+
+
+[tool.aerich]
+tortoise_orm = "devme.settings.TORTOISE_ORM"
+location = "./migrations"
+src_folder = "./."
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
