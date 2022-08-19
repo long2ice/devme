@@ -2,9 +2,9 @@ from enum import Enum
 
 
 class FrameworkType(str, Enum):
-    nodejs = "nodejs"
+    nodejs = "NodeJS"
     html = "html"
-    docker = "docker"
+    docker = "Docker"
     docker_compose = "docker-compose"
 
 
