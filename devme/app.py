@@ -12,6 +12,7 @@ from devme.exceptions import (
     http_exception_handler,
     not_exists_exception_handler,
     validation_exception_handler,
+    exception_handler,
 )
 from devme.routes import router
 from devme.settings import settings, TORTOISE_ORM
@@ -52,6 +53,7 @@ app.include_router(router)
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(DoesNotExist, not_exists_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(Exception, exception_handler)
 
 
 @app.on_event("startup")

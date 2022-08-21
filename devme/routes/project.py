@@ -1,9 +1,10 @@
 from typing import List, Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from tortoise.contrib.pydantic import pydantic_model_creator
-
+from tortoise.exceptions import IntegrityError
+from starlette.status import HTTP_409_CONFLICT
 from devme.enums import FrameworkType
 from devme.models import GitProvider, Project
 from devme.settings import settings
@@ -30,7 +31,10 @@ class CreateProject(BaseModel):
 
 @router.post("", response_model=pydantic_model_creator(Project))
 async def create_project(req: CreateProject):
-    project = await Project.create(**req.dict(exclude_none=True, exclude_unset=True))
+    try:
+        project = await Project.create(**req.dict(exclude_none=True, exclude_unset=True))
+    except IntegrityError:
+        raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Same project exists!")
     if req.git_provider_id:
         git_provider = await GitProvider.get(pk=req.git_provider_id)
         git = get_git(git_provider.type)(git_provider.token)
