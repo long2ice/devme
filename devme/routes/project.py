@@ -2,9 +2,10 @@ from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
+from starlette.status import HTTP_409_CONFLICT
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.exceptions import IntegrityError
-from starlette.status import HTTP_409_CONFLICT
+
 from devme.enums import FrameworkType
 from devme.models import GitProvider, Project
 from devme.settings import settings

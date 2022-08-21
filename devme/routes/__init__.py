@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from devme.routes import deploy, domain, git, project, framework
+from devme.routes import deploy, domain, framework, git, project
 
 router = APIRouter()
 router.include_router(project.router, prefix="/project", tags=["Project"])

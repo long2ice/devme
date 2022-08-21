@@ -38,6 +38,8 @@ class GitHub(Git):
             "hub.secret": settings.secret,
         }
         res = await self.client.post("/hub", data=data)
+        if res.status_code == 204:
+            return
         ret = res.json()
         logger.info(ret)
 
