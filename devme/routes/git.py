@@ -10,7 +10,7 @@ from devme.enums import GitType
 from devme.exceptions import GetGitReposError
 from devme.models import GitProvider
 from devme.schema import Repo
-from devme.utils import get_git
+from devme.utils import get_git, get_owner_repo_from_url
 
 router = APIRouter()
 
@@ -21,6 +21,17 @@ async def get_git_repos(git_id: int):
     git = get_git(git_provider.type)(token=git_provider.token)
     try:
         return await git.get_repos()
+    except GetGitReposError as e:
+        raise HTTPException(detail=str(e), status_code=HTTP_401_UNAUTHORIZED)
+
+
+@router.get("/{git_id}/repo/branches", response_model=List[str])
+async def get_repo_branches(git_id: int, url: str):
+    git_provider = await GitProvider.get(pk=git_id)
+    git = get_git(git_provider.type)(token=git_provider.token)
+    try:
+        owner, repo = get_owner_repo_from_url(url)
+        return await git.get_branches(owner, repo)
     except GetGitReposError as e:
         raise HTTPException(detail=str(e), status_code=HTTP_401_UNAUTHORIZED)
 

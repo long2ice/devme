@@ -20,8 +20,8 @@ class Project(Model):
 
 class Domain(Model):
     project: fields.ForeignKeyRelation[Project] = fields.ForeignKeyField("models.Project")
-    domain = fields.CharField(max_length=200, unique=True)
     branch = fields.CharField(max_length=200, default="main")
+    domain = fields.CharField(max_length=200, unique=True)
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
 

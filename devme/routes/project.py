@@ -8,15 +8,17 @@ from tortoise.exceptions import IntegrityError
 
 from devme.enums import FrameworkType
 from devme.models import GitProvider, Project
+from devme.responses import ProjectInfo
 from devme.settings import settings
 from devme.utils import get_git, get_owner_repo_from_url
 
 router = APIRouter()
 
 
-@router.get("", response_model=List[pydantic_model_creator(Project)])  # type:ignore
+@router.get("", response_model=List[ProjectInfo])  # type:ignore
 async def get_projects():
-    return await Project.all()
+    data = await Project.all()
+    return data
 
 
 class CreateProject(BaseModel):
@@ -30,7 +32,7 @@ class CreateProject(BaseModel):
     git_provider_id: Optional[int]
 
 
-@router.post("", response_model=pydantic_model_creator(Project))
+@router.post("", response_model=ProjectInfo)
 async def create_project(req: CreateProject):
     try:
         project = await Project.create(**req.dict(exclude_none=True, exclude_unset=True))

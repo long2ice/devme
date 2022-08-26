@@ -20,12 +20,15 @@ class NodeJS(Html):
         image: Optional[str] = None,
         root: str = ".",
         ssl: bool = False,
+        branch: str = "main",
         output_dir: Optional[str] = None,
         envs: Optional[List[Env]] = None,
         install_command: Optional[str] = None,
         build_command: Optional[str] = None,
     ):
-        super().__init__(project_name, git_url, domains, log_callback, image, envs, root, ssl)
+        super().__init__(
+            project_name, git_url, domains, log_callback, image, envs, root, ssl, branch
+        )
 
         if output_dir:
             self.output_dir = output_dir

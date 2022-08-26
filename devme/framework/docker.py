@@ -29,8 +29,9 @@ class Docker(Framework):
         envs: Optional[List[Env]] = None,
         root: str = ".",
         ssl: bool = False,
+        branch: str = "main",
     ):
-        super().__init__(project_name, git_url, log_callback, image, envs, root, ssl)
+        super().__init__(project_name, git_url, log_callback, image, envs, root, ssl, branch)
         self.command = command
         self.ports = ports
         self.network = network

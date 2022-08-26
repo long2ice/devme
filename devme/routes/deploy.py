@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 from starlette.background import BackgroundTasks
 from starlette.requests import Request
 
@@ -41,16 +41,18 @@ async def deploy(d: Deploy):
         root=project.root,
         domains=domains,
         branch=d.branch,
-        **project.deployment,  # type:ignore
         log_callback=log_callback,
+        **project.deployment,  # type:ignore
     )
     await f.build()
     await f.deploy()
     await f.clear()
+    d.status = DeployStatus.success
+    await d.save(update_fields=["status"])
 
 
 class DeployProject(BaseModel):
-    branch: str
+    branch: constr(min_length=1, strip_whitespace=True)
 
 
 @router.post("")
